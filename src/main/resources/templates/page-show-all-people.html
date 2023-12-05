@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List of users</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        a {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #1d5bb8;
+        }
+    </style>
+</head>
+<body>
+
+<h2>List of users</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Email</th>
+        <th>Edit Person</th>
+        <th>Show-Person</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="person : ${AllPeople}">
+        <td th:text="${person.id}"></td>
+        <td th:text="${person.name}"></td>
+        <td th:text="${person.age}"></td>
+        <td th:text="${person.email}"></td>
+        <td><a th:href="@{/people/edit/{id}(id=${person.id})}">Edit</a></td>
+        <td><a th:href="@{/people/{id}(id=${person.id})}">Show</a></td>
+    </tr>
+    </tbody>
+</table>
+    <a class="btn btn-primary" href="/people/new">Create new people!</a>
+</body>
+</html>

@@ -31,14 +31,11 @@ public class PersonController {
     }
     @GetMapping("/new")
     public String newPerson(@ModelAttribute("person") Person person){
-
         return "page-new-person";
     }
-
-
-
     @GetMapping("/{id}")
     public String showPerson(@PathVariable("id") long id, Model model){
+        model.addAttribute("books", personDAO.getBooksByPersonId(id));
         model.addAttribute("person", personDAO.getPersonById(id));
         return "page-show-person";
     }
@@ -48,7 +45,6 @@ public class PersonController {
         model.addAttribute("person", personDAO.getPersonById(id));
         return "page-edit-person";
     }
-
 
     @PostMapping
     public String create(@ModelAttribute("person") @Validated Person person,
@@ -70,12 +66,9 @@ public class PersonController {
             return "redirect:/people";
         }
     }
-
     @DeleteMapping
     public String delete(long id){
         personDAO.deletePerson(id);
         return  "redirect:/people";
     }
-
-
 }

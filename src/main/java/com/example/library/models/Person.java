@@ -13,11 +13,10 @@ public class Person {
 
     }
 
-    public Person(String name, int age, String email, long id) {
+    public Person(String name, int age, String email) {
         this.name = name;
         this.age = age;
         this.email = email;
-        this.id = id;
     }
 
     public String getName() {

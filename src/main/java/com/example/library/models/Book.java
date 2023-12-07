@@ -10,11 +10,10 @@ public class Book {
 
     public Book(){}
 
-    public Book(String name, String author, int year, long id) {
+    public Book(String name, String author, int year) {
         this.name = name;
         this.author = author;
         this.year = year;
-        this.id = id;
     }
 
     public String getName() {

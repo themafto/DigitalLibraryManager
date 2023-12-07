@@ -2,17 +2,16 @@ package com.example.library.dao;
 
 
 import com.example.library.models.Book;
+import com.example.library.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
-@Repository
 public class BookDAO {
 
     private JdbcTemplate jdbcTemplate;
@@ -42,5 +41,22 @@ public class BookDAO {
     public void delete(long id) {
         String sql = "DELETE FROM book WHERE id=?";
         jdbcTemplate.update(sql, id);
+    }
+
+    public Optional<Person> getBookOwner(long id) {
+        // Выбираем все колонки таблицы Person из объединенной таблицы
+        return jdbcTemplate.query("SELECT Person.* FROM Book JOIN Person ON Book.person_id = Person.id " +
+                        "WHERE Book.id = ?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
+                .stream().findAny();
+    }
+
+    // Освбождает книгу (этот метод вызывается, когда человек возвращает книгу в библиотеку)
+    public void release(long id) {
+        jdbcTemplate.update("UPDATE Book SET person_id=NULL WHERE id=?", id);
+    }
+    // Назначает книгу человеку (этот метод вызывается, когда человек забирает книгу из библиотеки)
+
+    public void assign(long id, Person selectedPerson) {
+        jdbcTemplate.update("UPDATE Book SET person_id=? WHERE id=?", selectedPerson.getId(), id);
     }
 }

@@ -8,10 +8,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-
 import javax.sql.DataSource;
 import java.util.Objects;
-
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
@@ -21,17 +19,16 @@ public class MvcConfig implements WebMvcConfigurer {
     public MvcConfig(Environment environment) {
         this.environment = environment;
     }
-
     @Bean
-    public DataSource dataSource(){
+    public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl(environment.getProperty("url"));
-        dataSource.setUsername(environment.getProperty("username"));
-        dataSource.setPassword(environment.getProperty("password"));
-        dataSource.setDriverClassName(Objects.requireNonNull(environment.getProperty("driver")));
-
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/db_library");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("postgres");
         return dataSource;
     }
+
 
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {

@@ -24,7 +24,7 @@ public class PersonDAO {
 
     public List<Person> getAllPerson(){
         String sql = "SELECT * FROM person";
-        return jdbcTemplate.query(sql, new PersonMapper());
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Person.class));
     }
 
     public Person getPersonById(long id){
@@ -32,8 +32,8 @@ public class PersonDAO {
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new BeanPropertyRowMapper<>(Person.class));
     }
     public void savePerson(Person person){
-        String sql = "INSERT INTO person(name, id, age, email) VALUES(?, ?, ?, ?)";
-        jdbcTemplate.update(sql, person.getName(), person.getId(), person.getAge(), person.getEmail());
+        String sql = "INSERT INTO person(name, age, email) VALUES(?, ?, ?)";
+        jdbcTemplate.update(sql, person.getName(), person.getAge(), person.getEmail());
 
     }
     public void update(long id, Person updatedPerson){
@@ -42,13 +42,13 @@ public class PersonDAO {
 
     }
 
-    public void deletePerson(long id){
+    public void deletePerson(long id) {
         String sql = "DELETE FROM person WHERE id=?";
         jdbcTemplate.update(sql, id);
 
     }
-    public Optional<Person> getPersonByFullName(String fullName) {
-        return jdbcTemplate.query("SELECT * FROM Person WHERE full_name=?", new Object[]{fullName},
+    public Optional<Person> getPersonByFullName(String name) {
+        return jdbcTemplate.query("SELECT * FROM Person WHERE name=?", new Object[]{name},
                 new BeanPropertyRowMapper<>(Person.class)).stream().findAny();
     }
 

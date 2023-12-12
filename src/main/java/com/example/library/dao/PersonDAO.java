@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 
+
 import java.util.List;
 import java.util.Optional;
 
@@ -24,12 +25,12 @@ public class PersonDAO {
 
     public List<Person> getAllPerson(){
         String sql = "SELECT * FROM person";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Person.class));
+        return jdbcTemplate.query(sql, new PersonMapper());
     }
 
     public Person getPersonById(long id){
         String sql = "SELECT * FROM person WHERE id=?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new BeanPropertyRowMapper<>(Person.class));
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new PersonMapper());
     }
     public void savePerson(Person person){
         String sql = "INSERT INTO person(name, age, email) VALUES(?, ?, ?)";

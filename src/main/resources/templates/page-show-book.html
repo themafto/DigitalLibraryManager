@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Show</title>
+
+    <!-- Подключение стилей Bootstrap для улучшения внешнего вида -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Wy6mfxQ8rnx/3p5PSTQbcfKTt6Lfo4/DXj" crossorigin="anonymous">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        span {
+            font-size: 16px;
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
+        form {
+            display: inline-block;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <p th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYear()}">VALUE</p>
+
+    <div th:if="${owner}" class="mb-3">
+        <span>Book owner now: </span>
+        <span th:text="${owner.getName()}">Person Name</span>
+
+        <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getId()})}">
+            <input type="submit" class="btn btn-danger" value="Release the book"/>
+        </form>
+    </div>
+
+    <div th:if="${people}" class="mb-3">
+        <span>This book is available. Who to assign it to?</span>
+        <form th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getId()})}">
+            <label for="person">Choose person</label>
+            <select th:object="${person}" th:field="*{id}" id="person" class="form-control">
+                <option th:each="person : ${people}" th:value="${person.getId()}" th:text="${person.getName()}">
+                </option>
+            </select>
+            <input type="submit" class="btn btn-success" value="Assign a book."/>
+        </form>
+    </div>
+
+    <hr/>
+
+    <form th:method="GET" th:action="@{/books/{id}/edit(id=${book.getId()})}">
+        <input type="submit" class="btn btn-primary" value="Edit"/>
+    </form>
+
+    <form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}">
+        <input type="submit" class="btn btn-danger" value="Delete"/>
+    </form>
+</div>
+
+</body>
+</html>

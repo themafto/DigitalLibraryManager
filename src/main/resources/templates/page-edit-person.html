@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Person</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: calc(100% - 12px);
+            padding: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .error {
+            color: #ff0000;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<form th:method="post" th:action="@{/people/edit/{id}(id=${person.getId()})}" th:object="${person}">
+    <label for="name">Write your name:</label>
+    <input type="text" th:field="*{name}" id="name"/>
+    <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Full Name Error</div>
+
+    <label for="age">Write your age:</label>
+    <input type="text" th:field="*{age}" id="age"/>
+    <div class="error" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</div>
+
+    <label for="email">Write your email:</label>
+    <input type="text" th:field="*{email}" id="email"/>
+    <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
+
+    <input type="submit" value="Edit!"/>
+</form>
+
+</body>
+</html>

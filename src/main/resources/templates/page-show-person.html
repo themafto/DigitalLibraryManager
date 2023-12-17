@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Person</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        div {
+            margin-bottom: 10px;
+        }
+
+        strong {
+            font-weight: bold;
+            color: #555;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Person Details</h2>
+
+<div>
+    <strong>Name:</strong> <span th:text="${person.name}"></span>
+</div>
+
+<div>
+    <strong>Age:</strong> <span th:text="${person.age}"></span>
+</div>
+
+<div>
+    <strong>Email:</strong> <span th:text="${person.email}"></span>
+</div>
+
+<h2>Books by this Person</h2>
+
+<ul>
+    <li th:each="book : ${books}" th:text="${book.name}"></li>
+</ul>
+
+<!-- Edit button to redirect to the edit page -->
+<a th:href="@{'/edit/' + ${person.id}}"><button>Edit</button></a>
+
+
+</body>
+</html>

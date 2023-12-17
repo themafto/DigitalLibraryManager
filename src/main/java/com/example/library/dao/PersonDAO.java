@@ -40,7 +40,6 @@ public class PersonDAO {
     public void update(long id, Person updatedPerson){
         String sql = "UPDATE person SET name=?, age=?, email=? WHERE id=?";
         jdbcTemplate.update(sql, updatedPerson.getName(), updatedPerson.getAge(), updatedPerson.getEmail(), id);
-
     }
 
     public void deletePerson(long id) {
@@ -50,6 +49,11 @@ public class PersonDAO {
     }
     public Optional<Person> getPersonByFullName(String name) {
         return jdbcTemplate.query("SELECT * FROM Person WHERE name=?", new Object[]{name},
+                new BeanPropertyRowMapper<>(Person.class)).stream().findAny();
+    }
+
+    public Optional<Person> getPersonByEmail(String email) {
+        return jdbcTemplate.query("SELECT * FROM Person WHERE email=?", new Object[]{email},
                 new BeanPropertyRowMapper<>(Person.class)).stream().findAny();
     }
 

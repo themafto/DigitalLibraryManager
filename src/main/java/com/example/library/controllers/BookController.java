@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/book")
+@RequestMapping("/books")
 public class BookController {
 
     private BookDAO bookDAO;
@@ -34,7 +34,7 @@ public class BookController {
         return "page-show-all-book";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/show/{id}")
     public String show(@PathVariable("id") long id, Model model, @ModelAttribute("person") Person person) {
         model.addAttribute("book", bookDAO.getBookById(id));
 
@@ -52,12 +52,12 @@ public class BookController {
         return "page-new-book";
     }
 
-    @PostMapping("/new")
+    @PostMapping("/new/book")
     public String create(@ModelAttribute("book") Book book, BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return "page-new-book";
         bookDAO.saveBook(book);
-        return "redirect:/book";
+        return "redirect:/books";
     }
 
     @GetMapping("/edit/{id}")
@@ -66,28 +66,29 @@ public class BookController {
         return "page-edit-book";
     }
 
-    @PatchMapping("/edit/{id}")
+    @PostMapping("/edit/{id}")
     public String update(@PathVariable("id") long id,@ModelAttribute("book") Book updatedBook,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "page-edit-book";
         bookDAO.update(id, updatedBook);
-        return "redirect:/book";
-    }
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") long id){
-        bookDAO.delete(id);
-        return "redirect:/book";
-    }
-    @PatchMapping("/{id}/release")
-    public String release(@PathVariable("id") long id) {
-        bookDAO.release(id);
-        return "redirect:/book/" + id;
+        return "redirect:/books";
     }
 
-    @PatchMapping("/{id}/assign")
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id") long id){
+        bookDAO.delete(id);
+        return "redirect:/books";
+    }
+    @PostMapping("/{id}/release")
+    public String release(@PathVariable("id") long id) {
+        bookDAO.release(id);
+        return "redirect:/books/show/" + id;
+    }
+
+    @PostMapping("/{id}/assign")
     public String assign(@PathVariable("id") long id, @ModelAttribute("person") Person selectedPerson) {
         bookDAO.assign(id, selectedPerson);
-        return "redirect:/book/" + id;
+        return "redirect:/books/show/" + id;
     }
 }

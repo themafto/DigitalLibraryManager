@@ -36,6 +36,25 @@ public class PersonController {
     public String newPerson(@ModelAttribute("person") Person person){
         return "page-new-person";
     }
+
+    @PostMapping()
+    public String create(@ModelAttribute("person") @Valid Person person,
+                         BindingResult bindingResult) {
+        personValidator.validate(person, bindingResult);
+
+        if (bindingResult.hasErrors())
+            return "page-new-person";
+
+        if (personDAO.getPersonByEmail(person.getEmail()).isPresent()) {
+            bindingResult.rejectValue("email", "", "Person with this email already exists");
+            return "page-new-person";
+        }
+
+        personDAO.savePerson(person);
+        return "redirect:/people";
+    }
+    
+    
     @GetMapping("/{id}")
     public String showPerson(@PathVariable("id") long id, Model model){
         model.addAttribute("books", personDAO.getBooksByPersonId(id));
@@ -49,29 +68,19 @@ public class PersonController {
         return "page-edit-person";
     }
 
-    @PostMapping()
-    public String create(@ModelAttribute("person") @Valid Person person,
-                         BindingResult bindingResult) {
-        personValidator.validate(person, bindingResult);
-
-        if (bindingResult.hasErrors())
-            return "page-new-person";
-
-        personDAO.savePerson(person);
-        return "redirect:/people";
-    }
 
     @PostMapping("/edit/{id}")
     public String update(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult,
-                         @PathVariable("id") int id) {
-        if (bindingResult.hasErrors())
+                         @PathVariable("id") long id) {
+        if (bindingResult.hasErrors()){
             return "page-edit-person";
-        {
+    } else {
             personDAO.update(id, person);
             return "redirect:/people";
         }
     }
+
     @DeleteMapping
     public String delete(long id){
         personDAO.deletePerson(id);
